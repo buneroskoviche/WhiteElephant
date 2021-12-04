@@ -8,6 +8,7 @@
         rel="stylesheet" 
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
         crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/style.css"/>
     <title>White Elephant</title>
 </head>
 <body>
@@ -17,14 +18,15 @@
             <h1>Toastmasters White Elephant 2021</h1>
         </header>
 
-        <div id="randomizer" class="border">
+        <div id="randomizer" class="border d-flex p-2">
             <button id="randomizer-btn" class="btn">Next</button>
             <h2 id="player-text">Select the first player!</h2>
         </div>
 
         <div id="game-board" class="border p-2 d-flex flex-wrap justify-content-center">
-            <div class="tile border" style="height: 200px; width: 200px;">
-                
+            <div id="tile-1" class="tile border" data-steals="0" data-bkg="./assets/Images/2.gif">
+                <h5 class="hidden">Title</h5>
+                <p class="hidden">Owner: <span class="owner"></span></p>
             </div>
         </div>
 

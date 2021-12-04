@@ -6,7 +6,7 @@ const $playerTxt = $("#player-text");
 const names = config.names;
 const gifts = config.gifts;
 
-const randomizeName = () => {
+const randomizePlayer = () => {
     // If there are no more names left, exit
     if(names.length < 1) {
         return "No more players left...";
@@ -19,8 +19,16 @@ const randomizeName = () => {
     return nextPlayer[0];
 }
 
-$randomizerBtn.on("click", function(event) {
-    const next = randomizeName();
+$randomizerBtn.on("click", () => {
+    const next = randomizePlayer();
     $playerTxt.text(next);
-    console.log(next);
 });
+
+$gameBoard.on("click", function(event) {
+    const element = event.target;
+    if(element.matches('.tile')) {
+        const id = element.getAttribute('id');
+        const bkg = element.getAttribute('data-bkg');
+        $(`#${id}`).attr('style', `background-image: url("${bkg}")`)
+    }
+})
