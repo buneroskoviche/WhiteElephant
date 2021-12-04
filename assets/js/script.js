@@ -6,6 +6,31 @@ const $playerTxt = $("#player-text");
 const names = config.names;
 const gifts = config.gifts;
 
+const appendTile = (object, number) => {
+    // Create the tile
+    const $tile = $("<div>").addClass("tile")
+        .attr('data-steals', 0)
+        .attr('data-bkg', `./assets/Images/${object.image}`)
+        .attr('id', `tile-${number}`);
+    // Create the title tag
+    const title = $("<h5>").text(object.title);
+    // Create the owner tag
+    const owner = $("<h5>").text('Owner: ');
+    // Create the owner span
+    const ownerSpan = $("<span>").addClass('owner')
+    // Put the owner span in the owner tag
+    owner.append(ownerSpan);
+    // Put the title and the owner in the tile
+    $tile.append(title).append(owner).children().addClass('d-none');
+    // Add the tile to the list
+    $gameBoard.append($tile);
+}
+
+// Append tiles for each gift
+for (let i = 0; i < gifts.length; i++) {
+    appendTile(gifts[i], i + 1);
+}
+
 const randomizePlayer = () => {
     // If there are no more names left, exit
     if(names.length < 1) {
@@ -35,6 +60,5 @@ $gameBoard.on("click", function(event) {
         } else {
             console.log('stolen!!')
         }
-        
     }
 })
