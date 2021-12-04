@@ -28,7 +28,13 @@ $gameBoard.on("click", function(event) {
     const element = event.target;
     if(element.matches('.tile')) {
         const id = element.getAttribute('id');
-        const bkg = element.getAttribute('data-bkg');
-        $(`#${id}`).attr('style', `background-image: url("${bkg}")`)
+        if(!element.classList.contains('claimed')) {
+            const bkg = element.getAttribute('data-bkg');
+            $(`#${id}`).css('background-image', `url("${bkg}")`).addClass('claimed');
+            $(`#${id}`).children('h5').removeClass('d-none');
+        } else {
+            console.log('stolen!!')
+        }
+        
     }
 })
