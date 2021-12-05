@@ -2,45 +2,17 @@ const $gameBoard = $("#game-board");
 const $randomizer = $("#randomizer");
 const $randomizerBtn = $("#randomizer-btn");
 const $playerTxt = $("#player-text");
+const $playerList = $("#player-list")
 
 const names = config.names;
 const gifts = config.gifts;
-
-const appendTile = (object, number) => {
-    // Create the tile
-    const $tile = $("<div>").addClass("tile border unclaimed")
-        .attr('data-bkg', `./assets/Images/${object.image}`)
-        .attr('id', number);
-    // Create the owner tag
-    const owner = $("<p>").text('Owner: ').addClass('owner');
-    // Create the owner span
-    const ownerSpan = $("<span>").addClass('owner-text')
-    // Put the owner span in the owner tag
-    owner.append(ownerSpan);
-    // Put the title and the owner in the tile
-    $tile.append(owner).children().addClass('d-none');
-    // Add the tile to the list
-    $gameBoard.append($tile);
-}
 
 // Append tiles for each gift
 for (let i = 0; i < gifts.length; i++) {
     appendTile(gifts[i], i + 1);
 }
-
-// This function chooses the next player randomly
-const randomizePlayer = () => {
-    // If there are no more names left, exit
-    if(names.length < 1) {
-        return "No more players left...";
-    }
-    // Generate a random number
-    const num = Math.floor(Math.random() * names.length);
-    // Splice the corresponding index in the names array
-    const nextPlayer = names.splice(num, 1);
-    // Return the player name
-    return nextPlayer[0];
-}
+// Render the player list
+renderPlayers(names);
 
 // This is the function for the next player button
 $randomizerBtn.on("click", () => {
@@ -81,7 +53,49 @@ $gameBoard.on("click", function(event) {
 });
 
 // This function will remove a class and add another
-const swapStatus = (id, current, next) => {
+function swapStatus(id, current, next) {
     $(`#${id}`).addClass(next)
         .removeClass(current);
+}
+
+// Generate a tile and add it the game board
+function appendTile(object, number) {
+    // Create the tile
+    const $tile = $("<div>").addClass("tile border unclaimed")
+        .attr('data-bkg', `./assets/Images/${object.image}`)
+        .attr('id', number);
+    // Create the owner tag
+    const owner = $("<p>").text('Owner: ').addClass('owner');
+    // Create the owner span
+    const ownerSpan = $("<span>").addClass('owner-text')
+    // Put the owner span in the owner tag
+    owner.append(ownerSpan);
+    // Put the title and the owner in the tile
+    $tile.append(owner).children().addClass('d-none');
+    // Add the tile to the list
+    $gameBoard.append($tile);
+}
+
+// This function will render a list of players
+function renderPlayers(array) {
+    array.forEach(player => {
+        $playerList.append(
+            $('<li>').text(player)
+        )
+    });
+    return;
+}
+
+// This function chooses the next player randomly
+const randomizePlayer = () => {
+    // If there are no more names left, exit
+    if(names.length < 1) {
+        return "No more players left...";
+    }
+    // Generate a random number
+    const num = Math.floor(Math.random() * names.length);
+    // Splice the corresponding index in the names array
+    const nextPlayer = names.splice(num, 1);
+    // Return the player name
+    return nextPlayer[0];
 }
