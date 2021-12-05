@@ -2,6 +2,15 @@
     height: 200px;
     width: 200px;
     background-image: url("../Images/1.gif");
+    display: flex;
+    align-items: flex-end;
+}
+
+.owner {
+    background-color: black;
+    color: white;
+    width: 100%;
+    margin: 0%;
 }
 
 .stolen::after {

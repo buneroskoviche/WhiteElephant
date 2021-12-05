@@ -8,19 +8,17 @@ const gifts = config.gifts;
 
 const appendTile = (object, number) => {
     // Create the tile
-    const $tile = $("<div>").addClass("tile unclaimed")
+    const $tile = $("<div>").addClass("tile border unclaimed")
         .attr('data-bkg', `./assets/Images/${object.image}`)
         .attr('id', number);
-    // Create the title tag
-    const title = $("<h5>").text(object.title);
     // Create the owner tag
-    const owner = $("<h5>").text('Owner: ');
+    const owner = $("<p>").text('Owner: ').addClass('owner');
     // Create the owner span
-    const ownerSpan = $("<span>").addClass('owner')
+    const ownerSpan = $("<span>").addClass('owner-text')
     // Put the owner span in the owner tag
     owner.append(ownerSpan);
     // Put the title and the owner in the tile
-    $tile.append(title).append(owner).children().addClass('d-none');
+    $tile.append(owner).children().addClass('d-none');
     // Add the tile to the list
     $gameBoard.append($tile);
 }
@@ -50,7 +48,8 @@ $randomizerBtn.on("click", () => {
 
 $gameBoard.on("click", function(event) {
     const element = event.target;
-    const tileStatus = element.classList[1];
+    const classes = element.classList
+    const tileStatus = classes[classes.length - 1];
     const id = element.getAttribute('id');
 
     switch(tileStatus) {
@@ -58,7 +57,7 @@ $gameBoard.on("click", function(event) {
             // Unhide elements
             const bkg = element.getAttribute('data-bkg');
             $(`#${id}`).css('background-image', `url("${bkg}")`)
-                .children('h5').removeClass('d-none');
+                .children().removeClass('d-none');
             // Switch to claimed
             swapStatus(id, tileStatus, 'claimed');
             break;
