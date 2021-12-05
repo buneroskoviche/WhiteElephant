@@ -13,6 +13,7 @@
     margin: 0%;
 }
 
+/* Stolen prizes will display a small icon */
 .stolen::after {
     display: block;
     content: "";
@@ -22,6 +23,7 @@
     width: 50px;
 }
 
+/* Locked prizes will enlarge the icon */
 .locked::after {
     display: block;
     position: relative;
