@@ -28,6 +28,7 @@ for (let i = 0; i < gifts.length; i++) {
     appendTile(gifts[i], i + 1);
 }
 
+// This function chooses the next player randomly
 const randomizePlayer = () => {
     // If there are no more names left, exit
     if(names.length < 1) {
@@ -41,17 +42,20 @@ const randomizePlayer = () => {
     return nextPlayer[0];
 }
 
+// This is the function for the next player button
 $randomizerBtn.on("click", () => {
     const next = randomizePlayer();
     $playerTxt.text(next);
 });
 
+// Function for the game board
 $gameBoard.on("click", function(event) {
     const element = event.target;
     const classes = element.classList
     const tileStatus = classes[classes.length - 1];
     const id = element.getAttribute('id');
 
+    // Determine the next action based on the status of the tile clicked
     switch(tileStatus) {
         case 'unclaimed':
             // Unhide elements
@@ -76,6 +80,7 @@ $gameBoard.on("click", function(event) {
     
 });
 
+// This function will remove a class and add another
 const swapStatus = (id, current, next) => {
     $(`#${id}`).addClass(next)
         .removeClass(current);

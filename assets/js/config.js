@@ -14,6 +14,10 @@ const config = {
         {
             "title": "Another Test Gift",
             "image": "2.gif"
+        },
+        {
+            "title": "Test testerino",
+            "image": "2.gif"
         }
     ]
 
