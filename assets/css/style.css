@@ -3,3 +3,24 @@
     width: 200px;
     background-image: url("../Images/1.gif");
 }
+
+.stolen::after {
+    display: inline-block;
+    content: "";
+    background: url('../Images/lock.png');
+    background-size: 50px 50px;
+    height: 50px;
+    width: 50px;
+}
+
+.locked::after {
+    display: inline-block;
+    position: relative;
+    top: 12%;
+    left: 12%;
+    content: "";
+    background: url(../Images/lock.png);
+    background-size: 150px 150px;
+    height: 150px;
+    width: 150px;
+}

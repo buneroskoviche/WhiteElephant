@@ -8,10 +8,9 @@ const gifts = config.gifts;
 
 const appendTile = (object, number) => {
     // Create the tile
-    const $tile = $("<div>").addClass("tile")
-        .attr('data-steals', 0)
+    const $tile = $("<div>").addClass("tile unclaimed")
         .attr('data-bkg', `./assets/Images/${object.image}`)
-        .attr('id', `tile-${number}`);
+        .attr('id', number);
     // Create the title tag
     const title = $("<h5>").text(object.title);
     // Create the owner tag
@@ -51,14 +50,34 @@ $randomizerBtn.on("click", () => {
 
 $gameBoard.on("click", function(event) {
     const element = event.target;
-    if(element.matches('.tile')) {
-        const id = element.getAttribute('id');
-        if(!element.classList.contains('claimed')) {
+    const tileStatus = element.classList[1];
+    const id = element.getAttribute('id');
+
+    switch(tileStatus) {
+        case 'unclaimed':
+            // Unhide elements
             const bkg = element.getAttribute('data-bkg');
-            $(`#${id}`).css('background-image', `url("${bkg}")`).addClass('claimed');
-            $(`#${id}`).children('h5').removeClass('d-none');
-        } else {
-            console.log('stolen!!')
-        }
+            $(`#${id}`).css('background-image', `url("${bkg}")`)
+                .children('h5').removeClass('d-none');
+            // Switch to claimed
+            swapStatus(id, tileStatus, 'claimed');
+            break;
+        case 'claimed':
+            // Switch to stolen
+            swapStatus(id, tileStatus, 'stolen');    
+            break;
+        case 'stolen':
+            // Switch to locked
+            swapStatus(id, tileStatus, 'locked');    
+            break;
+        default:
+            alert('This prize is locked!');
+            break;
     }
-})
+    
+});
+
+const swapStatus = (id, current, next) => {
+    $(`#${id}`).addClass(next)
+        .removeClass(current);
+}
