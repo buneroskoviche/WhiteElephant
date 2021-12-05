@@ -15,8 +15,13 @@ for (let i = 0; i < gifts.length; i++) {
 renderPlayers(names);
 
 // This is the function for the next player button
-$randomizerBtn.on("click", () => {
+$randomizerBtn.on("click", function() {
+    // Choose a random name
     const next = randomizePlayer();
+    // Re-render the list of names
+    $playerList.children().remove();
+    renderPlayers(names);
+    // Set the current player
     $playerTxt.text(next);
 });
 
@@ -76,18 +81,25 @@ function appendTile(object, number) {
     $gameBoard.append($tile);
 }
 
-// This function will render a list of players
+// This function will render the list of players
 function renderPlayers(array) {
+    if(array.length < 1) {
+        $playerList.append(
+            $('<li>').text('No players left...')
+        )
+        return;
+    }
+    
     array.forEach(player => {
         $playerList.append(
-            $('<li>').text(player)
+            $('<li>').text(player).attr('id', player)
         )
     });
     return;
 }
 
 // This function chooses the next player randomly
-const randomizePlayer = () => {
+function randomizePlayer() {
     // If there are no more names left, exit
     if(names.length < 1) {
         return "No more players left...";
@@ -98,4 +110,9 @@ const randomizePlayer = () => {
     const nextPlayer = names.splice(num, 1);
     // Return the player name
     return nextPlayer[0];
+}
+
+// This function will set the current player
+function setCurrentPlayer() {
+    console.log('setting player')
 }
