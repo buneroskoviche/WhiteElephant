@@ -6,6 +6,7 @@ const $playerList = $("#player-list")
 
 const names = config.names;
 const gifts = config.gifts;
+let currentPlayer = "";
 
 // Append tiles for each gift
 for (let i = 0; i < gifts.length; i++) {
@@ -14,7 +15,7 @@ for (let i = 0; i < gifts.length; i++) {
 // Render the player list
 renderPlayers(names);
 
-// This is the function for the next player button
+// Function for the next player button
 $randomizerBtn.on("click", function() {
     // Choose a random name
     const next = randomizePlayer();
@@ -22,11 +23,17 @@ $randomizerBtn.on("click", function() {
     $playerList.children().remove();
     renderPlayers(names);
     // Set the current player
-    $playerTxt.text(next);
+    setCurrentPlayer(next);
 });
 
 // Function for the game board
 $gameBoard.on("click", function(event) {
+    // If no player is selected, alert
+    if(!currentPlayer) {
+        alert('Choose a player first!');
+        return;
+    }
+
     const element = event.target;
     const classes = element.classList
     const tileStatus = classes[classes.length - 1];
@@ -41,17 +48,27 @@ $gameBoard.on("click", function(event) {
                 .children().removeClass('d-none');
             // Switch to claimed
             swapStatus(id, tileStatus, 'claimed');
+            // Set the new owner
+            setOwner(id);
+            // Reset the current player
+            setCurrentPlayer();
             break;
         case 'claimed':
             // Switch to stolen
             swapStatus(id, tileStatus, 'stolen');    
+            // Switch the active player to the old owner
+            handleSteal(id);
             break;
         case 'stolen':
             // Switch to locked
-            swapStatus(id, tileStatus, 'locked');    
+            swapStatus(id, tileStatus, 'locked');
+            // Switch the active player to the old owner
+            handleSteal(id);
+            break;
+        case 'locked':
+            alert('This prize is locked!');
             break;
         default:
-            alert('This prize is locked!');
             break;
     }
     
@@ -83,13 +100,15 @@ function appendTile(object, number) {
 
 // This function will render the list of players
 function renderPlayers(array) {
+    // If the array is empty
     if(array.length < 1) {
         $playerList.append(
+            // Render this instead
             $('<li>').text('No players left...')
         )
         return;
     }
-    
+
     array.forEach(player => {
         $playerList.append(
             $('<li>').text(player).attr('id', player)
@@ -113,6 +132,36 @@ function randomizePlayer() {
 }
 
 // This function will set the current player
-function setCurrentPlayer() {
-    console.log('setting player')
+function setCurrentPlayer(player) {
+    // If no player is specified
+    if(!player) {
+        // Reset everything
+        currentPlayer = "";
+        $playerTxt.text('Select the next player!');
+        $randomizerBtn.removeClass('d-none');
+        return;
+    }
+    currentPlayer = player;
+    $playerTxt.text(player);
+    $randomizerBtn.addClass('d-none');
+}
+
+// This function will swap a prize's owner
+function setOwner(tileId) {
+    // Get the owner span
+    $tileOwnerSpan = $(`#${tileId}`).children().children('span');
+    // Get the current value
+    oldOwner = $tileOwnerSpan.text();
+    // Set the new owner
+    $tileOwnerSpan.text(currentPlayer);
+    // Return the old owner
+    return oldOwner;
+}
+
+// This function will handle when a player steals a prize
+function handleSteal(tileId) {
+    // Switch the owner and return the old owner
+    const stolenPlayer = setOwner(tileId);
+    // Set the old owner to the active player
+    setCurrentPlayer(stolenPlayer);
 }
