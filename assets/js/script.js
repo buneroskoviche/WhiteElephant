@@ -35,6 +35,10 @@ $randomizerBtn.on("click", function() {
 $gameBoard.on("click", function(event) {
     // If no player is selected, alert
     if(!currentPlayer) {
+        if(names.length === 0) {
+            alert('No players left.');
+            return;
+        }
         alert('Choose a player first!');
         return;
     }
