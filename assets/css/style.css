@@ -1,7 +1,14 @@
+header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
 .tile {
-    height: 200px;
-    width: 200px;
+    height: 150px;
+    width: 150px;
     background-image: url("../Images/1.gif");
+    background-size: contain;
     display: flex;
     flex-direction: column-reverse;
 }

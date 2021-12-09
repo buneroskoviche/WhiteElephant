@@ -14,36 +14,23 @@
 <body>
     <main class="container-fluid">
         
-        <div class="row">    
-            <header class="d-flex justify-content-center border">
-                <h1>Toastmasters White Elephant</h1>
-            </header>
-        </div>
+        <header class="row">    
+
+            <div id="randomizer" class="border d-flex justify-content-center">
+                <h2 id="player-text" class="mx-2">Select the first player!</h2>
+                <button id="randomizer-btn" class="btn mx-2">Select Random Player</button>
+            </div>
+
+        </header>
 
         <div class="row">
-            
-            <div class="col-8">
 
                 <div id="game-board" class="border p-2 d-flex flex-wrap justify-content-around">
                     <div id="tile-1" class="tile border unclaimed" data-bkg="./assets/Images/2.gif">
-                        <p class="d-none owner">Owner: <span class="owner-text">hehe</span></h5>
+                        <p class="d-none owner"><span class="owner-text">hehe</span></h5>
                     </div>
                 </div>
 
-            </div>
-
-            <div class="col-4">
-
-                <div id="randomizer" class="border p-2">
-                    <h2 id="player-text">Select the first player!</h2>
-                    <button id="randomizer-btn" class="btn">Select Random Player</button>
-                </div>
-
-                <div id='players' class="border">
-                    <ul id="player-list">
-                    </ul>
-                </div>
-                
             </div>
 
         </div>
