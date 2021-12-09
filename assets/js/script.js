@@ -19,10 +19,16 @@ for (let i = 0; i < 140; i++) {
 
 // Function for the next player button
 $randomizerBtn.on("click", function() {
-    // Choose a random name
-    const next = randomizePlayer();
-    // Set the current player
-    setCurrentPlayer(next);
+    if(names.length !== 0) {
+        // Choose a random name
+        const next = randomizePlayer();
+        // Set the current player
+        setCurrentPlayer(next);
+        return;
+    }
+    $playerTxt.text("That's all folks!");
+    $randomizerBtn.addClass('d-none');
+    return;
 });
 
 // Function for the game board
@@ -103,7 +109,7 @@ function appendTile(object, number) {
 function randomizePlayer() {
     // If there are no more names left, exit
     if(names.length < 1) {
-        return "No more players left...";
+        return "That's all folks!";
     }
     // Generate a random number
     const num = Math.floor(Math.random() * names.length);
