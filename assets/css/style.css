@@ -1,19 +1,21 @@
+/* Stick the header to the top of the page */
 header {
     position: sticky;
     top: 0;
     background-color: white;
 }
 
+/* Styling for each gift tile */
 .tile {
     height: 150px;
     width: 150px;
-    /* background-image: url("../Images/1.gif"); */
     background-size: contain;
     background-repeat: no-repeat;
     display: flex;
     flex-direction: column-reverse;
 }
 
+/* Styling for the owner text area */
 .owner {
     background-color: black;
     color: white;
@@ -25,7 +27,7 @@ header {
 .stolen::after {
     display: block;
     content: "";
-    background: url('../Images/lock.png');
+    background: url('../Images/X.png');
     background-size: 50px 50px;
     height: 50px;
     width: 50px;
@@ -35,11 +37,10 @@ header {
 .locked::after {
     display: block;
     position: relative;
-    bottom: 10%;
-    left: 12%;
+    left: 10%;
     content: "";
-    background: url(../Images/lock.png);
-    background-size: 150px 150px;
-    height: 150px;
-    width: 150px;
+    background: url(../Images/X.png);
+    background-size: 125px 125px;
+    height: 125px;
+    width: 125px;
 }
