@@ -12,7 +12,6 @@ let currentPlayer = "";
 
 // Append tiles for each gift
 for (let i = 0; i < gifts.length; i++) {
-    console.log(gifts[i])
     appendTile(gifts[i], i + 1);
 }
 
@@ -94,8 +93,12 @@ function swapStatus(id, current, next) {
 
 // Generate a tile and add it the game board
 function appendTile(object, number) {
+    // Select a random package
+    const hider = packages[Math.floor(Math.random() * packages.length)];
     // Create the tile
-    const $tile = $("<div>").addClass("tile border unclaimed")
+    const $tile = $("<div>")
+        .addClass("tile border unclaimed")
+        .css('background-image', `url(./assets/Images/packages/${hider})`)
         .attr('data-bkg', `./assets/Images/gifts/${object.image}`)
         .attr('id', number);
     // Create the owner tag

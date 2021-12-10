@@ -7,7 +7,7 @@ header {
 .tile {
     height: 150px;
     width: 150px;
-    background-image: url("../Images/1.gif");
+    /* background-image: url("../Images/1.gif"); */
     background-size: contain;
     background-repeat: no-repeat;
     display: flex;
