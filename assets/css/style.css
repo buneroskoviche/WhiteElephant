@@ -11,8 +11,15 @@ header {
     width: 150px;
     background-size: contain;
     background-repeat: no-repeat;
-    display: flex;
-    flex-direction: column-reverse;
+    /* display: flex;
+    flex-direction: column-reverse; */
+}
+
+/* Format the tile number */
+.tileNum {
+    color: white;
+    text-align: center;
+    font-family: 'Ravie', Arial, Helvetica, sans-serif;
 }
 
 /* Styling for the owner text area */

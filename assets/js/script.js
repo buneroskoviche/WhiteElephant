@@ -53,10 +53,14 @@ $gameBoard.on("click", function(event) {
     // Determine the next action based on the status of the tile clicked
     switch(tileStatus) {
         case 'unclaimed':
-            // Unhide elements
+            // Unhide hidden elements
             const bkg = element.getAttribute('data-bkg');
             $(`#${id}`).css('background-image', `url("${bkg}")`)
                 .children().removeClass('d-none');
+            // Hide the ID number
+            $(`#${id}`).children('h1').addClass('d-none');
+            // Adjust flex settings
+            swapStatus(id, 'justify-content-center align-items-center', 'flex-column-reverse');
             // Switch to claimed
             swapStatus(id, tileStatus, 'claimed');
             // Set the new owner
@@ -97,18 +101,20 @@ function appendTile(object, number) {
     const hider = packages[Math.floor(Math.random() * packages.length)];
     // Create the tile
     const $tile = $("<div>")
-        .addClass("tile border unclaimed")
+        .addClass("d-flex justify-content-center align-items-center tile border unclaimed")
         .css('background-image', `url(./assets/Images/packages/${hider})`)
         .attr('data-bkg', `./assets/Images/gifts/${object.image}`)
         .attr('id', number);
+    // Create the tag for the ID number
+    const $idTag = $("<h1>").text(number).addClass('tileNum');
     // Create the owner tag
     const owner = $("<p>").text('Owner: ').addClass('owner');
     // Create the owner span
     const ownerSpan = $("<span>").addClass('owner-text')
     // Put the owner span in the owner tag
     owner.append(ownerSpan);
-    // Put the title and the owner in the tile
-    $tile.append(owner).children().addClass('d-none');
+    // Put the owner tag in the tile
+    $tile.append($idTag).append(owner).children('p').addClass('d-none');
     // Add the tile to the list
     $gameBoard.append($tile);
 }
