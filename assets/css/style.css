@@ -9,6 +9,7 @@ header {
     width: 150px;
     background-image: url("../Images/1.gif");
     background-size: contain;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column-reverse;
 }

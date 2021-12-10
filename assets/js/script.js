@@ -6,16 +6,19 @@ const $playerList = $("#player-list")
 
 const names = config.names;
 const gifts = config.gifts;
+const packages = config.packages;
+
 let currentPlayer = "";
 
 // Append tiles for each gift
-// for (let i = 0; i < gifts.length; i++) {
-//     appendTile(gifts[i], i + 1);
-// }
-
-for (let i = 0; i < 140; i++) {
-    appendTile(gifts[1], i + 1);
+for (let i = 0; i < gifts.length; i++) {
+    console.log(gifts[i])
+    appendTile(gifts[i], i + 1);
 }
+
+// for (let i = 0; i < 140; i++) {
+//     appendTile(gifts[1], i + 1);
+// }
 
 // Function for the next player button
 $randomizerBtn.on("click", function() {
@@ -93,7 +96,7 @@ function swapStatus(id, current, next) {
 function appendTile(object, number) {
     // Create the tile
     const $tile = $("<div>").addClass("tile border unclaimed")
-        .attr('data-bkg', `./assets/Images/${object.image}`)
+        .attr('data-bkg', `./assets/Images/gifts/${object.image}`)
         .attr('id', number);
     // Create the owner tag
     const owner = $("<p>").text('Owner: ').addClass('owner');
