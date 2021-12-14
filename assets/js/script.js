@@ -194,5 +194,7 @@ function newPlayer() {
     }
     $playerTxt.text("That's all folks!");
     $randomizerBtn.addClass('d-none');
+    $chooseBtn.addClass('d-none');
+    $skipBtn.addClass('d-none');
     return;
 }
