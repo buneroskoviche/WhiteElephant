@@ -12,6 +12,7 @@ const intGifts = config.gifts;
 const packages = config.packages;
 
 let currentPlayer = "";
+let lastStolen = ";";
 
 // Quadruple the gifts array
 const gifts = [];
@@ -58,9 +59,8 @@ $gameBoard.on("click", function(event) {
     const id = element.getAttribute('id');
     const bkg = element.getAttribute('data-bkg');
 
-    // Check the data attribute for the last holder
-    if(currentPlayer === element.getAttribute('data-last')) {
-        // Return if it matches the current player
+    // Check if the tile was just stolen
+    if(id === lastStolen) {
         alert('No steal-backs!')
         return;
     }
@@ -174,6 +174,7 @@ function setCurrentPlayer(player) {
         currentPlayer = "";
         $playerTxt.text('Select the next player!');
         $randomizerBtn.removeClass('d-none');
+        lastStolen = ';'
         return;
     }
     currentPlayer = player;
@@ -198,8 +199,8 @@ function setOwner(tileId) {
 function handleSteal(tileId) {
     // Switch the owner and return the old owner
     const stolenPlayer = setOwner(tileId);
-    // Add stolen player as a data tag to the tile
-    $(`#${tileId}`).attr('data-last', stolenPlayer);
+    // Save the ID of the stolen tile
+    lastStolen = tileId;
     // Remove the old result listed
     $(`#${stolenPlayer.replace(' ', '-')}`).remove();
     // Set the old owner to the active player
