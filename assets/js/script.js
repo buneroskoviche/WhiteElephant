@@ -4,7 +4,8 @@ const $randomizerBtn = $("#randomizer-btn");
 const $skipBtn = $("#skip-btn");
 const $chooseBtn = $("#choose-btn");
 const $playerTxt = $("#player-text");
-const $playerList = $("#player-list");
+const $results = $("#results");
+const $resultsList = $("#results-list");
 
 const names = config.names;
 const intGifts = config.gifts;
@@ -55,6 +56,7 @@ $gameBoard.on("click", function(event) {
     const classes = element.classList
     const tileStatus = classes[classes.length - 1];
     const id = element.getAttribute('id');
+    const bkg = element.getAttribute('data-bkg');
 
     // Check the data attribute for the last holder
     if(currentPlayer === element.getAttribute('data-last')) {
@@ -67,7 +69,6 @@ $gameBoard.on("click", function(event) {
     switch(tileStatus) {
         case 'unclaimed':
             // Unhide hidden elements
-            const bkg = element.getAttribute('data-bkg');
             $(`#${id}`).css('background-image', `url("${bkg}")`)
                 .children().removeClass('d-none');
             // Hide the ID number
@@ -78,18 +79,24 @@ $gameBoard.on("click", function(event) {
             swapStatus(id, tileStatus, 'claimed');
             // Set the new owner
             setOwner(id);
+            // Add result to the list
+            addResult(currentPlayer, bkg.split('/')[4]);
             // Reset the current player
             setCurrentPlayer();
             break;
         case 'claimed':
             // Switch to stolen
-            swapStatus(id, tileStatus, 'stolen');    
+            swapStatus(id, tileStatus, 'stolen');
+            // Add result to the list
+            addResult(currentPlayer, bkg.split('/')[4]);   
             // Switch the active player to the old owner
             handleSteal(id);
             break;
         case 'stolen':
             // Switch to locked
             swapStatus(id, tileStatus, 'locked');
+            // Add result to the list
+            addResult(currentPlayer, bkg.split('/')[4]);
             // Switch the active player to the old owner
             handleSteal(id);
             break;
@@ -136,7 +143,14 @@ function appendTile(object, number) {
     $gameBoard.append($tile);
 }
 
-
+// This function will add a player and their prize to the results list
+function addResult(player, prize) {
+    // Make a list item
+    const newResult = $("<li>").attr('id', player.replace(' ', '-')).text(`${player}: ${prize}`);
+    // Append it to the list
+    $resultsList.append(newResult);
+    return;
+}
 
 // This function chooses the next player randomly
 function randomizePlayer() {
@@ -165,6 +179,7 @@ function setCurrentPlayer(player) {
     currentPlayer = player;
     $playerTxt.text(player);
     $randomizerBtn.addClass('d-none');
+    return;
 }
 
 // This function will swap a prize's owner
@@ -185,6 +200,8 @@ function handleSteal(tileId) {
     const stolenPlayer = setOwner(tileId);
     // Add stolen player as a data tag to the tile
     $(`#${tileId}`).attr('data-last', stolenPlayer);
+    // Remove the old result listed
+    $(`#${stolenPlayer.replace(' ', '-')}`).remove();
     // Set the old owner to the active player
     setCurrentPlayer(stolenPlayer);
     return;

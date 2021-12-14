@@ -31,6 +31,12 @@ header {
     cursor: no-drop;
 }
 
+/* Formatting for the results list */
+#results {
+    color: white;
+    background-color: gray;
+}
+
 /* Format the tile number */
 .tileNum {
     color: white;
