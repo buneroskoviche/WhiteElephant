@@ -106,14 +106,14 @@ function appendTile(object, number) {
     const hider = packages[Math.floor(Math.random() * packages.length)];
     // Create the tile
     const $tile = $("<div>")
-        .addClass("d-flex justify-content-center align-items-center tile border unclaimed")
+        .addClass("d-flex justify-content-center align-items-center border border-light rounded tile unclaimed")
         .css('background-image', `url(./assets/Images/packages/${hider})`)
         .attr('data-bkg', `./assets/Images/gifts/${object.image}`)
         .attr('id', number);
     // Create the tag for the ID number
     const $idTag = $("<h1>").text(number).addClass('tileNum');
     // Create the owner tag
-    const owner = $("<p>").addClass('owner');
+    const owner = $("<p>").addClass('d-flex justify-content-center owner');
     // Create the owner span
     const ownerSpan = $("<span>").addClass('owner-text')
     // Put the owner span in the owner tag
