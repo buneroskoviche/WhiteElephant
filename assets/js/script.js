@@ -5,19 +5,24 @@ const $playerTxt = $("#player-text");
 const $playerList = $("#player-list")
 
 const names = config.names;
-const gifts = config.gifts;
+const intGifts = config.gifts;
 const packages = config.packages;
 
 let currentPlayer = "";
 
-// Append tiles for each gift
-for (let i = 0; i < gifts.length; i++) {
-    appendTile(gifts[i], i + 1);
+// Quadruple the gifts array
+const gifts = [];
+for (let i = 0; i < 4; i++) {
+    gifts.push(...intGifts);
 }
 
-// for (let i = 0; i < 140; i++) {
-//     appendTile(gifts[1], i + 1);
-// }
+// Append tiles for each player
+for (let i = 0; i < names.length; i++) {
+    // Extract a random gift from the array
+    const randomGift = gifts.splice(Math.floor(Math.random() * gifts.length), 1);
+    // Add a tile to the board with that gift
+    appendTile(randomGift[0], i + 1);
+}
 
 // Function for the next player button
 $randomizerBtn.on("click", function() {
@@ -108,7 +113,7 @@ function appendTile(object, number) {
     // Create the tag for the ID number
     const $idTag = $("<h1>").text(number).addClass('tileNum');
     // Create the owner tag
-    const owner = $("<p>").text('Owner: ').addClass('owner');
+    const owner = $("<p>").addClass('owner');
     // Create the owner span
     const ownerSpan = $("<span>").addClass('owner-text')
     // Put the owner span in the owner tag
