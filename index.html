@@ -13,6 +13,7 @@
 </head>
 <body>
     <main class="container-fluid">
+
         
         <header class="row">    
 
@@ -21,18 +22,17 @@
                 <button id="randomizer-btn" class="btn btn-light mx-2">Select Random Player</button>
                 <button id="choose-btn" class="btn btn-light mx-2 d-none">Choose Another Player</button>
                 <button id="skip-btn" class="btn btn-light mx-2 d-none">Skip</button>
-                <button id="results-btn" class="btn btn-light mx-2 d-none">Show Results</button>
             </div>
 
         </header>
 
+        <button id="results-btn" class="btn btn-light mx-2 ">Show List</button>
+
         <div class="row">
 
-            <div id="results" >
-                <ul id="results-list">
-                    <!-- Prizes and their holders get added here -->
-                </ul>
-            </div>    
+            <ul id="results" class="p-2 d-none">
+                <!-- Prizes and their holders get added here -->
+            </ul>  
             
             <div id="game-board" class="p-2 d-flex flex-wrap justify-content-around">
                 <!-- Tiles generate in here -->

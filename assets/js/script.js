@@ -5,7 +5,7 @@ const $skipBtn = $("#skip-btn");
 const $chooseBtn = $("#choose-btn");
 const $playerTxt = $("#player-text");
 const $results = $("#results");
-const $resultsList = $("#results-list");
+const $resultsBtn = $("#results-btn");
 
 const names = config.names;
 const intGifts = config.gifts;
@@ -40,6 +40,13 @@ $chooseBtn.on("click", function() {
     // Choose another player
     newPlayer();
 });
+
+// Results buttons will show the results list
+$resultsBtn.on("click", function() {
+    $results.toggleClass('d-none');
+    $gameBoard.toggleClass('d-none');
+   
+})
 
 // Function for the game board
 $gameBoard.on("click", function(event) {
@@ -146,9 +153,9 @@ function appendTile(object, number) {
 // This function will add a player and their prize to the results list
 function addResult(player, prize) {
     // Make a list item
-    const newResult = $("<li>").attr('id', player.replace(' ', '-')).text(`${player}: ${prize}`);
+    const newResult = $("<li>").attr('id', player.replace(' ', '-')).text(`${player}: ${prize.replace('.png', '')}`);
     // Append it to the list
-    $resultsList.append(newResult);
+    $results.append(newResult);
     return;
 }
 
@@ -224,5 +231,6 @@ function newPlayer() {
     $randomizerBtn.addClass('d-none');
     $chooseBtn.addClass('d-none');
     $skipBtn.addClass('d-none');
+    $resultsBtn.removeClass('d-none');
     return;
 }

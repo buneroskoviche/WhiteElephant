@@ -37,6 +37,12 @@ header {
     background-color: gray;
 }
 
+/* Set the position of the results list toggler */
+#results-btn {
+    position: fixed;
+    bottom: 10px;
+}
+
 /* Format the tile number */
 .tileNum {
     color: white;
