@@ -32,6 +32,10 @@ header {
     cursor: pointer;
 }
 
+.locked:hover {
+    cursor: no-drop;
+}
+
 /* Format the tile number */
 .tileNum {
     color: white;

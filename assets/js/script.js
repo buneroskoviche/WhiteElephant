@@ -1,8 +1,10 @@
 const $gameBoard = $("#game-board");
 const $randomizer = $("#randomizer");
 const $randomizerBtn = $("#randomizer-btn");
+const $skipBtn = $("#skip-btn");
+const $chooseBtn = $("#choose-btn");
 const $playerTxt = $("#player-text");
-const $playerList = $("#player-list")
+const $playerList = $("#player-list");
 
 const names = config.names;
 const intGifts = config.gifts;
@@ -24,18 +26,17 @@ for (let i = 0; i < names.length; i++) {
     appendTile(randomGift[0], i + 1);
 }
 
-// Function for the next player button
-$randomizerBtn.on("click", function() {
-    if(names.length !== 0) {
-        // Choose a random name
-        const next = randomizePlayer();
-        // Set the current player
-        setCurrentPlayer(next);
-        return;
-    }
-    $playerTxt.text("That's all folks!");
-    $randomizerBtn.addClass('d-none');
-    return;
+// Functions for the start button and skip button are the same
+$randomizerBtn.on("click", newPlayer);
+$skipBtn.on("click", newPlayer);
+
+// Function for the "Choose Another Player" button
+// will add the current player back to the list first
+$chooseBtn.on("click", function() {
+    // Add the current player back to the list
+    names.push(currentPlayer);
+    // Choose another player
+    newPlayer();
 });
 
 // Function for the game board
@@ -91,6 +92,10 @@ $gameBoard.on("click", function(event) {
         default:
             break;
     }
+
+    // Hide the option buttons
+    $skipBtn.addClass('d-none');
+    $chooseBtn.addClass('d-none');
     
 });
 
@@ -173,4 +178,21 @@ function handleSteal(tileId) {
     const stolenPlayer = setOwner(tileId);
     // Set the old owner to the active player
     setCurrentPlayer(stolenPlayer);
+}
+
+// This function will choose another player and remove them from the list
+function newPlayer() {
+    if(names.length !== 0) {
+        // Choose a random name
+        const next = randomizePlayer();
+        // Set the current player
+        setCurrentPlayer(next);
+        // Unhide the other buttons
+        $chooseBtn.removeClass('d-none');
+        $skipBtn.removeClass('d-none');
+        return;
+    }
+    $playerTxt.text("That's all folks!");
+    $randomizerBtn.addClass('d-none');
+    return;
 }
