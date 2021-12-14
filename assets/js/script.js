@@ -56,6 +56,13 @@ $gameBoard.on("click", function(event) {
     const tileStatus = classes[classes.length - 1];
     const id = element.getAttribute('id');
 
+    // Check the data attribute for the last holder
+    if(currentPlayer === element.getAttribute('data-last')) {
+        // Return if it matches the current player
+        alert('No steal-backs!')
+        return;
+    }
+
     // Determine the next action based on the status of the tile clicked
     switch(tileStatus) {
         case 'unclaimed':
@@ -176,13 +183,16 @@ function setOwner(tileId) {
 function handleSteal(tileId) {
     // Switch the owner and return the old owner
     const stolenPlayer = setOwner(tileId);
+    // Add stolen player as a data tag to the tile
+    $(`#${tileId}`).attr('data-last', stolenPlayer);
     // Set the old owner to the active player
     setCurrentPlayer(stolenPlayer);
+    return;
 }
 
 // This function will choose another player and remove them from the list
 function newPlayer() {
-    if(names.length !== 0) {
+    if(names.length >= 1) {
         // Choose a random name
         const next = randomizePlayer();
         // Set the current player
