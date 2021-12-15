@@ -49,7 +49,7 @@ if(local) {
     for (let i = 0; i < 4; i++) {
         gifts.push(...intGifts);
     }
-    // Append random tiles based on the number of players
+    // Append tiles based on the number of players
     for (let i = 0; i < names.length; i++) {
         // Extract a random gift from the array
         const randomGift = gifts.splice(Math.floor(Math.random() * gifts.length), 1);
