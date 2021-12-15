@@ -8,18 +8,10 @@ const $results = $("#results");
 const $resultsBtn = $("#results-btn");
 
 const names = config.names;
-const intGifts = config.gifts;
 const packages = config.packages;
-
 
 let currentPlayer = "";
 let lastStolen = ";";
-
-// Quadruple the gifts array
-const gifts = [];
-for (let i = 0; i < 4; i++) {
-    gifts.push(...intGifts);
-}
 
 // Set up an array that will hold local storage data
 const storage = [];
@@ -46,10 +38,16 @@ if(local) {
         if(!classes.includes('unclaimed')){
             reavealTile(id, image);
             setOwner(id, owner);
+            addResult(owner, image);
         }
     }
-    console.log(storage);
 } else {
+    // Quadruple the gifts array
+    const intGifts = config.gifts;
+    const gifts = [];
+    for (let i = 0; i < 4; i++) {
+        gifts.push(...intGifts);
+    }
     // Append random tiles based on the number of players
     for (let i = 0; i < names.length; i++) {
         // Extract a random gift from the array
@@ -124,7 +122,7 @@ $gameBoard.on("click", function(event) {
             // Set the new owner
             setOwner(id, currentPlayer);
             // Add result to the list
-            // addResult(currentPlayer, bkg.split('/')[4]);
+            addResult(currentPlayer, bkg);
             // Update the save object with new classes
             toSave.classes = tile.className;
             // Save to storage
@@ -136,7 +134,7 @@ $gameBoard.on("click", function(event) {
             // Switch to stolen
             swapStatus(id, tileStatus, 'stolen');
             // Add result to the list
-            // addResult(currentPlayer, bkg.split('/')[4]);
+            addResult(currentPlayer, bkg);
             // Update the save object with new classes
             toSave.classes = tile.className;
             // Save to storage
@@ -148,7 +146,7 @@ $gameBoard.on("click", function(event) {
             // Switch to locked
             swapStatus(id, tileStatus, 'locked');
             // Add result to the list
-            // addResult(currentPlayer, bkg.split('/')[4]);
+            addResult(currentPlayer, bkg);
             // Update the save object with new classes
             toSave.classes = tile.className;
             // Save to storage
@@ -208,6 +206,7 @@ function appendTile(imgString, number, classString) {
 
 // This function will add a player and their prize to the results list
 function addResult(player, prize) {
+    console.log(player, prize)
     // Make a list item
     const newResult = $("<li>").attr('id', player.replace(' ', '-')).text(`${player}: ${prize.replace('.png', '')}`);
     // Append it to the list
