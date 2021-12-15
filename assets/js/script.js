@@ -11,6 +11,14 @@ const names = config.names;
 const intGifts = config.gifts;
 const packages = config.packages;
 
+// Set up an array with local storage data
+const storage = [];
+const local = localStorage.getItem('white-elephant')
+if(local) {
+    storage.push(...JSON.parse(local))
+}
+
+console.log(storage);
 let currentPlayer = "";
 let lastStolen = ";";
 
@@ -45,7 +53,6 @@ $chooseBtn.on("click", function() {
 $resultsBtn.on("click", function() {
     $results.toggleClass('d-none');
     $gameBoard.toggleClass('d-none');
-   
 })
 
 // Function for the game board
@@ -60,11 +67,18 @@ $gameBoard.on("click", function(event) {
         return;
     }
 
-    const element = event.target;
-    const classes = element.classList
+    const tile = event.target;
+    const classes = tile.classList
     const tileStatus = classes[classes.length - 1];
-    const id = element.getAttribute('id');
-    const bkg = element.getAttribute('data-bkg');
+    const id = tile.getAttribute('id');
+    const bkg = tile.getAttribute('data-bkg');
+
+    // Create an object to save to local storage
+    const toSave = {
+        owner: currentPlayer,
+        gift: bkg,
+        classes: tile.className
+    }
 
     // Check if the tile was just stolen
     if(id === lastStolen) {
@@ -88,6 +102,10 @@ $gameBoard.on("click", function(event) {
             setOwner(id);
             // Add result to the list
             addResult(currentPlayer, bkg.split('/')[4]);
+            // Update the save object with new classes
+            toSave.classes = tile.className;
+            // Save to storage
+            updateStorage(toSave);
             // Reset the current player
             setCurrentPlayer();
             break;
@@ -95,7 +113,11 @@ $gameBoard.on("click", function(event) {
             // Switch to stolen
             swapStatus(id, tileStatus, 'stolen');
             // Add result to the list
-            addResult(currentPlayer, bkg.split('/')[4]);   
+            addResult(currentPlayer, bkg.split('/')[4]);
+            // Update the save object with new classes
+            toSave.classes = tile.className;
+            // Save to storage
+            updateStorage(toSave); 
             // Switch the active player to the old owner
             handleSteal(id);
             break;
@@ -104,6 +126,10 @@ $gameBoard.on("click", function(event) {
             swapStatus(id, tileStatus, 'locked');
             // Add result to the list
             addResult(currentPlayer, bkg.split('/')[4]);
+            // Update the save object with new classes
+            toSave.classes = tile.className;
+            // Save to storage
+            updateStorage(toSave);
             // Switch the active player to the old owner
             handleSteal(id);
             break;
@@ -233,4 +259,20 @@ function newPlayer() {
     $skipBtn.addClass('d-none');
     $resultsBtn.removeClass('d-none');
     return;
+}
+
+// This function will save the state of the game to local storage
+function updateStorage(object) {
+    // Remove any entries of the prize holder from the storage array
+    for (let i = 0; i < storage.length; i++) {
+        if(object.owner === storage[i].owner) {
+            storage.splice(i, 1);
+        }
+    }
+    console.log(storage)
+    // Add the tile to the storage array
+    storage.push(object);
+    console.log(storage)
+    // Save the array to local
+    localStorage.setItem('white-elephant', JSON.stringify(storage));
 }
