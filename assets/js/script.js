@@ -11,14 +11,7 @@ const names = config.names;
 const intGifts = config.gifts;
 const packages = config.packages;
 
-// Set up an array with local storage data
-const storage = [];
-const local = localStorage.getItem('white-elephant')
-if(local) {
-    storage.push(...JSON.parse(local))
-}
 
-console.log(storage);
 let currentPlayer = "";
 let lastStolen = ";";
 
@@ -28,12 +21,47 @@ for (let i = 0; i < 4; i++) {
     gifts.push(...intGifts);
 }
 
-// Append tiles for each player
-for (let i = 0; i < names.length; i++) {
-    // Extract a random gift from the array
-    const randomGift = gifts.splice(Math.floor(Math.random() * gifts.length), 1);
-    // Add a tile to the board with that gift
-    appendTile(randomGift[0], i + 1);
+// Set up an array that will hold local storage data
+const storage = [];
+
+// If local storage data exists...
+const local = localStorage.getItem('white-elephant')
+if(local) {
+    // Load it and add it to the storage array
+    storage.push(...JSON.parse(local));
+    // Remove any players that have already claimed gifts
+    for (let i = 0; i < storage.length; i++) {
+        for (let j = 0; j < names.length; j++) {
+            if (storage[i].owner === names[j]) {
+                names.splice(j, 1);
+                break;
+            }
+        }
+    }
+    // Load tiles onto the board
+    for (let i = 0; i < storage.length; i++) {
+        const { id, image, classes, owner } = storage[i];
+        appendTile(image, id, classes);
+        // Reveal if the gift is claimed
+        if(!classes.includes('unclaimed')){
+            reavealTile(id, image);
+            setOwner(id, owner);
+        }
+    }
+    console.log(storage);
+} else {
+    // Append random tiles based on the number of players
+    for (let i = 0; i < names.length; i++) {
+        // Extract a random gift from the array
+        const randomGift = gifts.splice(Math.floor(Math.random() * gifts.length), 1);
+        // Add a tile to the board with that gift
+        const defaultClasses = "d-flex justify-content-center align-items-center border border-light rounded tile unclaimed"
+        const save = appendTile(randomGift[0].image, i + 1, defaultClasses);
+        // Add the tile data to the storage array
+        storage.push(save);
+    }
+    // Save the default storage array
+    localStorage.setItem('white-elephant', JSON.stringify(storage));
 }
 
 // Functions for the start button and skip button are the same
@@ -75,8 +103,9 @@ $gameBoard.on("click", function(event) {
 
     // Create an object to save to local storage
     const toSave = {
+        id: Number(id),
         owner: currentPlayer,
-        gift: bkg,
+        image: bkg,
         classes: tile.className
     }
 
@@ -89,19 +118,13 @@ $gameBoard.on("click", function(event) {
     // Determine the next action based on the status of the tile clicked
     switch(tileStatus) {
         case 'unclaimed':
-            // Unhide hidden elements
-            $(`#${id}`).css('background-image', `url("${bkg}")`)
-                .children().removeClass('d-none');
-            // Hide the ID number
-            $(`#${id}`).children('h1').addClass('d-none');
-            // Adjust flex settings
-            swapStatus(id, 'justify-content-center align-items-center', 'flex-column-reverse');
+            reavealTile(id, bkg);
             // Switch to claimed
             swapStatus(id, tileStatus, 'claimed');
             // Set the new owner
-            setOwner(id);
+            setOwner(id, currentPlayer);
             // Add result to the list
-            addResult(currentPlayer, bkg.split('/')[4]);
+            // addResult(currentPlayer, bkg.split('/')[4]);
             // Update the save object with new classes
             toSave.classes = tile.className;
             // Save to storage
@@ -113,7 +136,7 @@ $gameBoard.on("click", function(event) {
             // Switch to stolen
             swapStatus(id, tileStatus, 'stolen');
             // Add result to the list
-            addResult(currentPlayer, bkg.split('/')[4]);
+            // addResult(currentPlayer, bkg.split('/')[4]);
             // Update the save object with new classes
             toSave.classes = tile.className;
             // Save to storage
@@ -125,7 +148,7 @@ $gameBoard.on("click", function(event) {
             // Switch to locked
             swapStatus(id, tileStatus, 'locked');
             // Add result to the list
-            addResult(currentPlayer, bkg.split('/')[4]);
+            // addResult(currentPlayer, bkg.split('/')[4]);
             // Update the save object with new classes
             toSave.classes = tile.className;
             // Save to storage
@@ -153,14 +176,14 @@ function swapStatus(id, current, next) {
 }
 
 // Generate a tile and add it the game board
-function appendTile(object, number) {
+function appendTile(imgString, number, classString) {
     // Select a random package
     const hider = packages[Math.floor(Math.random() * packages.length)];
     // Create the tile
     const $tile = $("<div>")
-        .addClass("d-flex justify-content-center align-items-center border border-light rounded tile unclaimed")
+        .addClass(classString)
         .css('background-image', `url(./assets/Images/packages/${hider})`)
-        .attr('data-bkg', `./assets/Images/gifts/${object.image}`)
+        .attr('data-bkg', imgString)
         .attr('id', number);
     // Create the tag for the ID number
     const $idTag = $("<h1>").text(number).addClass('tileNum');
@@ -174,6 +197,13 @@ function appendTile(object, number) {
     $tile.append($idTag).append(owner).children('p').addClass('d-none');
     // Add the tile to the list
     $gameBoard.append($tile);
+    // Return a default object to save to storage
+    return {
+        id: number,
+        owner: '',
+        classes: classString,
+        image: imgString,
+    }
 }
 
 // This function will add a player and their prize to the results list
@@ -217,13 +247,13 @@ function setCurrentPlayer(player) {
 }
 
 // This function will swap a prize's owner
-function setOwner(tileId) {
+function setOwner(tileId, name) {
     // Get the owner span
     $tileOwnerSpan = $(`#${tileId}`).children().children('span');
     // Get the current value
     oldOwner = $tileOwnerSpan.text();
     // Set the new owner
-    $tileOwnerSpan.text(currentPlayer);
+    $tileOwnerSpan.text(name);
     // Return the old owner
     return oldOwner;
 }
@@ -231,7 +261,7 @@ function setOwner(tileId) {
 // This function will handle when a player steals a prize
 function handleSteal(tileId) {
     // Switch the owner and return the old owner
-    const stolenPlayer = setOwner(tileId);
+    const stolenPlayer = setOwner(tileId, currentPlayer);
     // Save the ID of the stolen tile
     lastStolen = tileId;
     // Remove the old result listed
@@ -263,16 +293,24 @@ function newPlayer() {
 
 // This function will save the state of the game to local storage
 function updateStorage(object) {
-    // Remove any entries of the prize holder from the storage array
+    console.log(storage)
+    // Splice in the new object data if the tile IDs match
     for (let i = 0; i < storage.length; i++) {
-        if(object.owner === storage[i].owner) {
-            storage.splice(i, 1);
+        if(object.id === storage[i].id) {
+            storage.splice(i, 1, object);
         }
     }
     console.log(storage)
-    // Add the tile to the storage array
-    storage.push(object);
-    console.log(storage)
     // Save the array to local
     localStorage.setItem('white-elephant', JSON.stringify(storage));
+}
+
+function reavealTile(id, bkg) {
+    // Unhide hidden elements
+    $(`#${id}`).css('background-image', `url("./assets/Images/gifts/${bkg}")`)
+    .children().removeClass('d-none');
+    // Hide the ID number
+    $(`#${id}`).children('h1').addClass('d-none');
+    // Adjust flex settings
+    swapStatus(id, 'justify-content-center align-items-center', 'flex-column-reverse');
 }
