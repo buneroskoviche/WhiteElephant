@@ -43,6 +43,13 @@ header {
     bottom: 10px;
 }
 
+/* Position the reset button */
+#reset-btn {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}
+
 /* Format the tile number */
 .tileNum {
     color: white;

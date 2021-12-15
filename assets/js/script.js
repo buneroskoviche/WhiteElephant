@@ -6,6 +6,7 @@ const $chooseBtn = $("#choose-btn");
 const $playerTxt = $("#player-text");
 const $results = $("#results");
 const $resultsBtn = $("#results-btn");
+const $resetBtn = $("#reset-btn");
 
 const names = config.names;
 const packages = config.packages;
@@ -42,7 +43,7 @@ if(local) {
         }
     }
 } else {
-    // Quadruple the gifts array
+    // Load in the gifts array
     const intGifts = config.gifts;
     const gifts = [];
     for (let i = 0; i < 4; i++) {
@@ -73,6 +74,15 @@ $chooseBtn.on("click", function() {
     names.push(currentPlayer);
     // Choose another player
     newPlayer();
+});
+
+// The Reset button will clear local storage and refresh the page
+$resetBtn.on("click", function() {
+    const message = 'Are you sure you want to reset? There is no way to get the game data back.';
+    if(confirm(message)){
+        localStorage.removeItem('white-elephant');
+        window.location.reload();
+    }
 });
 
 // Results buttons will show the results list
@@ -206,7 +216,6 @@ function appendTile(imgString, number, classString) {
 
 // This function will add a player and their prize to the results list
 function addResult(player, prize) {
-    console.log(player, prize)
     // Make a list item
     const newResult = $("<li>").attr('id', player.replace(' ', '-')).text(`${player}: ${prize.replace('.png', '')}`);
     // Append it to the list
@@ -292,14 +301,12 @@ function newPlayer() {
 
 // This function will save the state of the game to local storage
 function updateStorage(object) {
-    console.log(storage)
     // Splice in the new object data if the tile IDs match
     for (let i = 0; i < storage.length; i++) {
         if(object.id === storage[i].id) {
             storage.splice(i, 1, object);
         }
     }
-    console.log(storage)
     // Save the array to local
     localStorage.setItem('white-elephant', JSON.stringify(storage));
 }
